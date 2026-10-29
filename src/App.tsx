@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   BookOpen,
+  ChartColumn,
   ClipboardList,
   Compass,
   FileText,
   LayoutDashboard,
+  ListChecks,
   Menu,
   Moon,
   Settings,
@@ -31,11 +33,21 @@ import { NotesView } from './views/NotesView.tsx';
 import { SettingsView } from './views/SettingsView.tsx';
 import { AdminDashboardView } from './views/AdminDashboardView.tsx';
 import { GettingStartedView } from './views/GettingStartedView.tsx';
+import { SubtaskManagerView } from './views/SubtaskManagerView.tsx';
+import { ProgressReportsView } from './views/ProgressReportsView.tsx';
 import { TaskDetailDrawer } from './components/TaskDetailDrawer.tsx';
 import { RestoreSyllabusModal } from './components/RestoreSyllabusModal.tsx';
 import { WorkspaceAuthModal } from './components/WorkspaceAuthModal.tsx';
 
-type NavPage = 'dashboard' | 'records' | 'notes' | 'settings' | 'admin' | 'guide';
+type NavPage =
+  | 'dashboard'
+  | 'records'
+  | 'subtasks'
+  | 'reports'
+  | 'notes'
+  | 'settings'
+  | 'admin'
+  | 'guide';
 
 function parsePathToPage(pathname: string): NavPage {
   const clean = pathname.replace(/\/+$/, '').toLowerCase();
@@ -44,12 +56,16 @@ function parsePathToPage(pathname: string): NavPage {
   if (clean === '/settings') return 'settings';
   if (clean === '/admin') return 'admin';
   if (clean === '/getting-started') return 'guide';
+  if (clean === '/subtask-manager') return 'subtasks';
+  if (clean === '/progress-reports') return 'reports';
   return 'dashboard';
 }
 
 function pageToPath(page: NavPage): string {
   if (page === 'dashboard') return '/';
   if (page === 'guide') return '/getting-started';
+  if (page === 'subtasks') return '/subtask-manager';
+  if (page === 'reports') return '/progress-reports';
   return `/${page}`;
 }
 
@@ -306,6 +322,34 @@ export function App() {
 
             <button
               type="button"
+              onClick={() => navigateTo('subtasks')}
+              aria-current={activePage === 'subtasks' ? 'page' : undefined}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                activePage === 'subtasks'
+                  ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400'
+                  : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800'
+              }`}
+            >
+              <ListChecks className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Subtask Manager</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigateTo('reports')}
+              aria-current={activePage === 'reports' ? 'page' : undefined}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                activePage === 'reports'
+                  ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400'
+                  : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800'
+              }`}
+            >
+              <ChartColumn className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Progress Reports</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => navigateTo('notes')}
               aria-current={activePage === 'notes' ? 'page' : undefined}
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
@@ -508,6 +552,26 @@ export function App() {
               authSession={authSession}
               settings={settings}
               onAuthChanged={refreshCoreData}
+            />
+          )}
+
+          {activePage === 'subtasks' && (
+            <SubtaskManagerView
+              urlParams={urlParams}
+              dataVersion={dataVersion}
+              onUpdateUrlParams={updateUrlParams}
+              onOpenTaskDetail={(id) => setDetailTaskId(id)}
+              onDataChanged={refreshCoreData}
+            />
+          )}
+
+          {activePage === 'reports' && (
+            <ProgressReportsView
+              settings={settings}
+              syllabus={syllabus}
+              dataVersion={dataVersion}
+              onOpenTaskDetail={(id) => setDetailTaskId(id)}
+              onNavigateSubtasks={() => navigateTo('subtasks')}
             />
           )}
 

@@ -16,7 +16,7 @@ import {
   User,
 } from 'lucide-react';
 
-type GuideTarget = 'dashboard' | 'records' | 'notes' | 'settings';
+type GuideTarget = 'dashboard' | 'records' | 'subtasks' | 'reports' | 'notes' | 'settings';
 
 interface GettingStartedViewProps {
   onNavigate: (page: GuideTarget) => void;
@@ -51,10 +51,10 @@ const QUICK_STEPS: Array<{
     icon: ClipboardList,
   },
   {
-    title: 'Open a record and tick its checklist',
-    body: 'Click any record title to open its details. Add the small steps you need, then tick them off as you finish.',
-    target: 'records',
-    action: 'Pick a record',
+    title: 'Plan steps and tick them off',
+    body: 'In the Subtask Manager, pick a record, add the small steps you need, then tick them off as you finish.',
+    target: 'subtasks',
+    action: 'Open Subtask Manager',
     icon: ListChecks,
   },
   {
@@ -201,6 +201,11 @@ export function GettingStartedView({ onNavigate }: GettingStartedViewProps) {
               <strong className="text-slate-800 dark:text-zinc-200">Arrange your list:</strong>{' '}
               sort by title, status, due date or recently updated. Choose <em>Manual Order</em> to
               move records up or down yourself. Switch between table and card view.
+            </li>
+            <li>
+              <strong className="text-slate-800 dark:text-zinc-200">Check your progress:</strong>{' '}
+              Progress Reports shows your completion percentage, progress for each Part and every
+              record you have finished.
             </li>
           </ul>
         </section>

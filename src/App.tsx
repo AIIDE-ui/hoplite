@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Award,
   BookOpen,
   ChartColumn,
   ClipboardList,
@@ -35,6 +36,7 @@ import { AdminDashboardView } from './views/AdminDashboardView.tsx';
 import { GettingStartedView } from './views/GettingStartedView.tsx';
 import { SubtaskManagerView } from './views/SubtaskManagerView.tsx';
 import { ProgressReportsView } from './views/ProgressReportsView.tsx';
+import { AchievementsView } from './views/AchievementsView.tsx';
 import { TaskDetailDrawer } from './components/TaskDetailDrawer.tsx';
 import { RestoreSyllabusModal } from './components/RestoreSyllabusModal.tsx';
 import { WorkspaceAuthModal } from './components/WorkspaceAuthModal.tsx';
@@ -44,6 +46,7 @@ type NavPage =
   | 'records'
   | 'subtasks'
   | 'reports'
+  | 'achievements'
   | 'notes'
   | 'settings'
   | 'admin'
@@ -58,6 +61,7 @@ function parsePathToPage(pathname: string): NavPage {
   if (clean === '/getting-started') return 'guide';
   if (clean === '/subtask-manager') return 'subtasks';
   if (clean === '/progress-reports') return 'reports';
+  if (clean === '/achievements') return 'achievements';
   return 'dashboard';
 }
 
@@ -350,6 +354,20 @@ export function App() {
 
             <button
               type="button"
+              onClick={() => navigateTo('achievements')}
+              aria-current={activePage === 'achievements' ? 'page' : undefined}
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                activePage === 'achievements'
+                  ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400'
+                  : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800'
+              }`}
+            >
+              <Award className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Achievements</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => navigateTo('notes')}
               aria-current={activePage === 'notes' ? 'page' : undefined}
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
@@ -572,6 +590,15 @@ export function App() {
               dataVersion={dataVersion}
               onOpenTaskDetail={(id) => setDetailTaskId(id)}
               onNavigateSubtasks={() => navigateTo('subtasks')}
+            />
+          )}
+
+          {activePage === 'achievements' && (
+            <AchievementsView
+              settings={settings}
+              syllabus={syllabus}
+              dataVersion={dataVersion}
+              onNavigate={(page) => navigateTo(page)}
             />
           )}
 

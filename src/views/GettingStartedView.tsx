@@ -205,7 +205,7 @@ export function GettingStartedView({ onNavigate }: GettingStartedViewProps) {
             <li>
               <strong className="text-slate-800 dark:text-zinc-200">Check your progress:</strong>{' '}
               Progress Reports shows your completion percentage, progress for each Part and every
-              record you have finished.
+              record you have finished. Achievements shows the badges you have earned.
             </li>
           </ul>
         </section>
